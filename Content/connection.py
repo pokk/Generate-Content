@@ -1,8 +1,25 @@
 """ Created by Jieyi on 4/15/16. """
 
+from urllib import request
+
+
+class HTMLContentGetter:
+    def __init__(self, url, decoder='utf8'):
+        self._url = url
+        self._decoder = decoder
+        self._connection = None
+
+    def obtain_content(self):
+        self.__access()
+        return self._connection.read().decode(self._decoder)
+
+    def __access(self):
+        self._connection = request.urlopen(self._url)
+
 
 def main():
-    print("hello world")
+    getter = HTMLContentGetter('https://en.wikipedia.org/wiki/Reinforcement_learning?oldformat=true')
+    print(getter.obtain_content())
 
 
 if __name__ == '__main__':
