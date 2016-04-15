@@ -17,22 +17,30 @@ class HTMLContentGetter:
         """
         Get the website content of assignment url.
 
-        :return: HTML all content.
+        :return: HTML all content or None.
         """
 
-        self.__access()
+        if not self.__access():
+            return None
+
         return self._connection.read().decode(self._decoder)
 
     def __access(self):
         """
         Open the url website and set the connection.
+
+        :return: True or False, because of the url link.
         """
+        if not self._url:
+            print('You must input a url link.')
+            return False
 
         self._connection = request.urlopen(self._url)
+        return True
 
 
 def main():
-    getter = HTMLContentGetter('https://en.wikipedia.org/wiki/Reinforcement_learning?oldformat=true')
+    getter = HTMLContentGetter(None)
     print(getter.obtain_content())
 
 

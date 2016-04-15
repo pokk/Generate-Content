@@ -24,7 +24,8 @@ class HtmlTagClass(Enum):
 
 class WikiArticleParser(HTMLParser):
     """
-    HTML parser for wiki article.
+    HTML parser for wiki article.  After parse the content, you
+    can get the article from wiki.
     """
 
     def __init__(self):
@@ -58,6 +59,7 @@ class WikiArticleParser(HTMLParser):
         """
 
         if tag == HtmlTag.DIV.value:
+            # Catch the tag ending.
             if self._is_content_tag and self._div_count > 0:
                 self._div_count -= 1
             if self._div_count == 0:
