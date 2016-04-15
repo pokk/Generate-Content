@@ -14,6 +14,12 @@ class HTMLContentGetter:
         self._connection = None
 
     def obtain_content(self):
+        """
+        Get the website content of assignment url.
+
+        :return: HTML all content.
+        """
+
         self.__access()
         return self._connection.read().decode(self._decoder)
 
