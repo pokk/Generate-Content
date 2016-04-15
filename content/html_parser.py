@@ -2,8 +2,6 @@
 from enum import Enum
 from html.parser import HTMLParser
 
-from content.connection import HTMLContentGetter
-
 
 class HtmlTag(Enum):
     """
@@ -91,18 +89,19 @@ class WikiArticleParser(HTMLParser):
             # Delete the back of article.
             if self._content[-1] in new_line_set:
                 del self._content[-1]
-            if all('\n' != s for s in (self._content[0], self._content[-1])):
+            if all(s != new_line for s in (self._content[0], self._content[-1]) for new_line in new_line_set):
                 break
 
         return self._content
 
 
 def main():
-    getter = HTMLContentGetter('https://en.wikipedia.org/wiki/Q-learning')
+    content = ''
 
     parser = WikiArticleParser()
-    parser.feed(getter.obtain_content())
-    print(''.join(parser.content))
+    parser.feed(content)
+    print(parser.content)
+    # print(''.join(parser.content))
     parser.close()
 
 
