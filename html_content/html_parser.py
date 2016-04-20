@@ -17,12 +17,12 @@ class HtmlTagClass(Enum):
     Class name of the HTML tag.
     """
 
-    ID_WIKI_CONTENT = 'mw-content-text'
+    ID_WIKI_CONTENT = 'mw-html_content-text'
 
 
 class WikiArticleParser(HTMLParser):
     """
-    HTML parser for wiki article.  After parse the content, you
+    HTML parser for wiki article.  After parse the html_content, you
     can get the article from wiki.
     """
 
@@ -101,7 +101,7 @@ def main():
     parser = WikiArticleParser()
     parser.feed(content)
     print(parser.content)
-    # print(''.join(parser.content))
+    # print(''.join(parser.html_content))
     parser.close()
 
 

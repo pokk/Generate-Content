@@ -2,12 +2,12 @@
 
 from urllib import request
 
-from content.html_parser import WikiArticleParser
+from html_content.html_parser import WikiArticleParser
 
 
 class HTMLContentGetter:
     """
-    Get the web html source content.
+    Get the web html source html_content.
     """
 
     def __init__(self, url, decoder='utf8'):
@@ -17,9 +17,9 @@ class HTMLContentGetter:
 
     def obtain_content(self, html_parser=None):
         """
-        Using the html parser parses the content.
+        Using the html parser parses the html_content.
 
-        :return: parsed content.
+        :return: parsed html_content.
         """
 
         if html_parser:
@@ -30,9 +30,9 @@ class HTMLContentGetter:
 
     def __get_content(self):
         """
-        Get the website content of assignment url.
+        Get the website html_content of assignment url.
 
-        :return: HTML all content or None.
+        :return: HTML all html_content or None.
         """
 
         if not self.__access():
