@@ -17,7 +17,7 @@ class HtmlTagClass(Enum):
     Class name of the HTML tag.
     """
 
-    ID_WIKI_CONTENT = 'mw-html_content-text'
+    ID_WIKI_CONTENT = 'mw-content-text'
 
 
 class WikiArticleParser(HTMLParser):
