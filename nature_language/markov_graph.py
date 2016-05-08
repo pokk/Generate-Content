@@ -20,7 +20,7 @@ class MarkovGraph:
     def __str__(self):
         pass
 
-    def aadd_to_graph(self, content_with_pos):
+    def add_pos_to_graph(self, content_with_pos):
         if not content_with_pos:
             return False
 
@@ -150,7 +150,7 @@ def main():
     a.analysis()
     l = a.pos_tag()
     m = MarkovGraph()
-    m.aadd_to_graph(l)
+    m.add_pos_to_graph(l)
 
     for s in m.graph_set:
         print(s, end=',     \t')
