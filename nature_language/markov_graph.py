@@ -4,20 +4,34 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from nature_language import markov_text
+from nature_language import marvel_text
 from nature_language.text_analysis import AnalysisWord
 from nature_language.word_node import WordNode
 
 
 class MarkovGraph:
     def __init__(self):
+        # the structure of graph set is {(word, pos): [WordNode, WordNode], (word, pos): [WordNode], ...}.
         self._graph_set = {}
         self._node_set = {}
         self._edge_set = {}
-        self._graph = nx.DiGraph()
+        self._graph = nx.DiGraph()  # this is direct graph.
 
     def __str__(self):
         pass
+
+    def aadd_to_graph(self, content_with_pos):
+        if not content_with_pos:
+            return False
+
+        prev_node = None
+
+        for w, t in content_with_pos[:30]:
+            current = WordNode(w, t)
+            self.add_to_graph(prev_node, current)
+            prev_node = current
+
+        return True
 
     def add_to_graph(self, prev_node, curr_node):
         """
@@ -28,7 +42,7 @@ class MarkovGraph:
         """
 
         if not prev_node:
-            self._add_to_graph_dict(curr_node, None)
+            self._add_to_graph_dict(prev_node, curr_node)
             return False
         else:
             self._add_to_node_dict(prev_node)
@@ -43,14 +57,18 @@ class MarkovGraph:
         # Add the connection status.
         for w in self._graph_set:
             for v in self._graph_set[w]:
+                # v is WordNode.
                 if v:
-                    self._graph.add_edge(w[0], v[0])
+                    self._graph.add_edge(w[0], v.word)
+
+        # it can change to un-direct graph.
+        # self._graph = self._graph.to_undirected()
 
         # Positions for all nodes.
         pos = nx.spring_layout(self._graph)
         nx.draw_networkx_nodes(self._graph, pos, node_size=700, node_color="white")
-        nx.draw_networkx_edges(self._graph, pos, width=2, alpha=0.5, edge_color='black')
-        nx.draw_networkx_labels(self._graph, pos, font_size=15, font_family='monospace')
+        nx.draw_networkx_edges(self._graph, pos, width=1, alpha=0.5, edge_color='black')
+        nx.draw_networkx_labels(self._graph, pos, font_size=10, font_family='monospace')
 
         plt.axis('off')
         plt.show()  # Display
@@ -64,13 +82,22 @@ class MarkovGraph:
         :return: true: insert success, false: it's already in the dictionary.
         """
 
-        if not self._graph_set.get(self._tuple_of_node(prev_node)):
-            self._graph_set[self._tuple_of_node(prev_node)] = [self._tuple_of_node(curr_node)]
+        tuple_of_prev_node, tuple_of_curr_node = self._tuple_of_node(prev_node), self._tuple_of_node(curr_node)
+
+        # the previous hasn't existed in the dictionary.
+        if not self._graph_set.get(tuple_of_prev_node):
+            # create a children list of current node.
+            self._graph_set[tuple_of_prev_node] = [curr_node]
         else:
-            if self._tuple_of_node(curr_node) in self._graph_set[self._tuple_of_node(prev_node)]:
-                return False
+            # the child has already appeared before.
+            for n in self._graph_set[tuple_of_prev_node]:
+                if tuple_of_curr_node == self._tuple_of_node(n):
+                    # we have to add 1 time to count variable.
+                    n.add_count()
+                    return False
             else:
-                self._graph_set[self._tuple_of_node(prev_node)].append(self._tuple_of_node(curr_node))
+                self._graph_set[tuple_of_prev_node].append(curr_node)
+
         return True
 
     def _add_to_node_dict(self, node):
@@ -81,8 +108,10 @@ class MarkovGraph:
         :return: true: success, false: insert fail
         """
 
-        if not self._node_set.get(self._tuple_of_node(node)):
-            self._node_set[self._tuple_of_node(node)] = node
+        tuple_of_node = self._tuple_of_node(node)
+
+        if not self._node_set.get(tuple_of_node):
+            self._node_set[tuple_of_node] = node
             return True
         return False
 
@@ -106,21 +135,28 @@ class MarkovGraph:
         """
 
         if not node:
-            return None
+            return None, None
         return node.word, node.pos
+
+    @property
+    def graph_set(self):
+        return self._graph_set
 
 
 def main():
-    a = AnalysisWord(markov_text)
+    a = AnalysisWord(marvel_text)  # build-in sentence.
+    # getter = HTMLContentGetter("https://en.wikipedia.org/wiki/Marvel_Comics")
+    # a = AnalysisWord(getter.obtain_content(WikiArticleParser()))
     a.analysis()
     l = a.pos_tag()
     m = MarkovGraph()
-    prev_node = None
+    m.aadd_to_graph(l)
 
-    for w, t in l[:10]:
-        current = WordNode(w, t)
-        m.add_to_graph(prev_node, current)
-        prev_node = current
+    for s in m.graph_set:
+        print(s, end=',     \t')
+        for n in m.graph_set[s]:
+            print(n, end=',  ')
+        print()
 
     m.draw_graph()
 
