@@ -12,7 +12,7 @@ class WordNode:
     def __init__(self, word=None, pos=None):
         self._word = word  # a word of the content.
         self._pos = pos  # the word of pos.
-        self._prev_count = 0  # the same previous word of the appearing times.
+        self._prev_count = 1  # the same previous word of the appearing times.
         self._score = 0  # the score of this word for calculating.
 
     def __str__(self):

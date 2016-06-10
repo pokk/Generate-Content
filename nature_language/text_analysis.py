@@ -5,7 +5,7 @@ import collections
 
 import nltk
 
-from nature_language import markov_text
+from nature_language import test_text
 
 
 class AnalysisWord:
@@ -76,7 +76,8 @@ class AnalysisWord:
 def main():
     # getter = HTMLContentGetter('https://en.wikipedia.org/wiki/Markov')
     # text = getter.obtain_content(WikiArticleParser())
-    text = markov_text
+    # text = markov_text
+    text = test_text
 
     a = AnalysisWord(text)
     a.analysis()
