@@ -1,9 +1,3 @@
 """ Created by Jieyi on 4/15/16. """
 
-
-def main():
-    print("hello world")
-
-
-if __name__ == '__main__':
-    main()
+# -*- coding: utf-8 -*-

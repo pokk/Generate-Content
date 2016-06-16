@@ -1,6 +1,5 @@
 """ Created by Jieyi on 4/18/16. """
 
-
 # -*- coding: utf-8 -*-
 
 test_text = """
