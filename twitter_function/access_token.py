@@ -57,6 +57,10 @@ class AccessToken:
 
 
 def main():
+    """
+    We just use one time to get the token then we can use it until we access again.
+    """
+
     at = AccessToken(jieyi_consumer_key, jieyi_consumer_secret)
     at.get_token()
 
