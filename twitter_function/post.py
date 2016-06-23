@@ -14,21 +14,22 @@ class Post:
     def post_plain_text(self, text):
         return self._api.PostUpdate(text)
 
-    def show_posts(self, user_name):
-        return self._api.GetUserTimeline(screen_name=user_name)
+    def show_posts(self, user_name, count=20):
+        return self._api.GetUserTimeline(screen_name=user_name, count=count)
 
-    def show_assign_post(self, id):
-        pass
+    def show_specific_post(self, user_name, post_id):
+        res = [list_post for list_post in self.show_posts(user_name, count=200) if list_post.AsDict()['id'] == post_id]
+        return res[0] if len(res) > 0 else None
 
 
 def main():
     p = Post(Login(jieyi_consumer_key, jieyi_consumer_secret, jieyi_access_token_key, jieyi_access_token_secret).login())
     # p.post_plain_text("Now is a good time!")
 
-    print(p.show_posts('pokkbaby'))
+    for s in p.show_posts('pokkbaby'):
+        print(s.AsDict()['id'])
 
-    # Login(jieyi_consumer_key, jieyi_consumer_secret, jieyi_access_token_key, jieyi_access_token_secret).login()
-
+    print(p.show_specific_post('pokkbaby', 745868719369388032))
 
 if __name__ == '__main__':
     main()
